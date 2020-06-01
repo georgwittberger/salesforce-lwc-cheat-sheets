@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salesforce Lightning Web Component Jest Test Cheat Sheet</title>
+    <style>
+      html {
+        font-size: 16px;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 1rem;
+      }
+      .header__heading {
+        color: #666;
+        font-size: 2rem;
+        margin: 0;
+        text-align: center;
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        margin-top: 1rem;
+      }
+      .content__column {
+        margin-top: 1rem;
+      }
+      .content__column:first-child {
+        margin-top: 0;
+      }
+      .topic {
+        border: 1px solid #ccc;
+        margin-top: 1rem;
+      }
+      .topic:first-child {
+        margin-top: 0;
+      }
+      @media (min-width: 1024px) {
+        .content {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+        .content__column {
+          margin-top: 0;
+          width: 49%;
+        }
+      }
+      .topic__header {
+        background-color: #f3f3f3;
+        border-bottom: 1px solid #ccc;
+      }
+      .topic__heading {
+        color: #666;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 0.25rem 0.5rem;
+      }
+      .topic__help_link {
+        color: #666;
+        font-size: 0.8rem;
+        text-decoration: none;
+      }
+      .topic__content {
+        padding: 0 0.5rem;
+      }
+      p {
+        color: #666;
+        font-size: 0.8rem;
+        margin: 0.5rem 0 0;
+      }
+      p:last-child {
+        margin-bottom: 0.25rem;
+      }
+      pre {
+        color: #666;
+        background-color: #f3f3f3;
+        border: 1px solid #ccc;
+        font-family: Consolas, "Courier New", Courier, monospace;
+        font-size: 0.8rem;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+      }
+      .footer {
+        color: #666;
+        font-size: 0.8rem;
+        margin-top: 2rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="header__heading">
+        Salesforce Lightning Web Component Jest Test Cheat Sheet
+      </h1>
+    </header>
+    <section class="content">
+      <section class="content__column">
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              SFDX Project Setup
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_installation"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              One-time configuration for SFDX project using Salesforce CLI:
+            </p>
+            <pre>sfdx force:lightning:lwc:test:setup</pre>
+            <p>
+              One-time local installation for already configured SFDX project:
+            </p>
+            <pre>npm install</pre>
+            <p>
+              Create file <b>jest.config.js</b> in project root (required for
+              Jest extension and debugging):
+            </p>
+            <pre>
+const { jestConfig } = require('@salesforce/sfdx-lwc-jest/config');
+module.exports = {
+  ...jestConfig
+};</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Running Tests
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_run_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>Run all tests in SFDX project:</p>
+            <pre>npm run test:unit</pre>
+            <p>Run all tests in SFDX project including coverage report:</p>
+            <pre>npm run test:unit:coverage</pre>
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Create Test File
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_create_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Test files must be located in subdirectory <b>__tests__</b> of the
+              component directory and must have the suffix <b>.test.js</b>.
+            </p>
+            <p>
+              Given a component <b>mySimpleComponent</b> the test file is
+              <b>
+                force-app/main/default/lwc/mySimpleComponent/__tests__/mySimpleComponent.test.js
+              </b>
+            </p>
+            <p>Create test file using Salesforce CLI:</p>
+            <pre>
+sfdx force:lightning:lwc:test:create -f {component JS file}</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test File Structure
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_create_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <pre>
+import { createElement } from 'lwc';
+import MySimpleComponent from 'c/mySimpleComponent';
+
+describe('c-my-simple-component', () => {
+  afterEach(() => {
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+  });
+
+  it('does something useful', () => {
+    // ...
+  });
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Basic Test
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_create_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>mySimpleComponent</b> with the following
+              class and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+export default class MySimpleComponent extends LightningElement {}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div class="message"&gt;Hello World&lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>Basic test is:</p>
+            <pre>
+it('displays the message', () => {
+  const element = createElement('c-my-simple-component', {
+    is: MySimpleComponent
+  });
+  document.body.appendChild(element);
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).not.toBeNull();
+  expect(message.textContent).toBe('Hello World');
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Asynchronous Test
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_create_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Required to defer test execution until asynchronous tasks (e.g.
+              server calls, rerendering) have completed.
+            </p>
+            <p>One-time install Node module <b>flush-promises</b>:</p>
+            <pre>npm install flush-promises --save-dev</pre>
+            <p>Import helper function in test file:</p>
+            <pre>import flushPromises from 'flush-promises';</pre>
+            <p>Use <b>async/await</b> with helper function in test case:</p>
+            <pre>
+it('does something useful', async () => {
+  // Initialize component and trigger async task
+  await flushPromises();
+  // Steps to execute after async task has completed
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test Public Properties
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_create_tests"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myParameterizedComponent</b> with the
+              following class and template:
+            </p>
+            <pre>
+import { api, LightningElement } from 'lwc';
+export default class MyParameterizedComponent extends LightningElement {
+  @api name;
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div class="message"&gt;Hello {name}&lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              If public property is always expected to be set
+              <b>before</b> component is added to DOM the test can by
+              <b>synchronous</b>:
+            </p>
+            <pre>
+it('displays the message', () => {
+  const element = createElement('c-my-parameterized-component', {
+    is: MyParameterizedComponent
+  });
+  element.name = 'John';  // Set property BEFORE adding LWC to DOM
+  document.body.appendChild(element);
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).not.toBeNull();
+  expect(message.textContent).toBe('Hello John');
+});</pre
+            >
+            <p>
+              If public property may change <b>after</b> component has been
+              added to DOM the test must be <b>asynchronous</b>:
+            </p>
+            <pre>
+it('displays the changed message', async () => {
+  const element = createElement('c-my-parameterized-component', {
+    is: MyParameterizedComponent
+  });
+  document.body.appendChild(element);
+  element.name = 'John';  // Set property AFTER adding LWC to DOM
+  await flushPromises();  // Wait for LWC to rerender
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).not.toBeNull();
+  expect(message.textContent).toBe('Hello John');
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test Wire Service
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_wire_utility"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+              <a
+                href="https://github.com/salesforce/wire-service-jest-util/blob/master/README.md"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myWireComponent</b> with the following class
+              and template:
+            </p>
+            <pre>
+import { LightningElement, wire } from 'lwc';
+import myControllerMethod from '@salesforce/apex/MyController.myControllerMethod';
+export default class MyWireComponent extends LightningElement {
+  name = 'John';
+  @wire(myControllerMethod, { name: '$name' })
+  wiredResult;
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div if:true={wiredResult.data} class="message"&gt;
+    {wiredResult.data.message}
+  &lt;/div&gt;
+  &lt;div if:true={wiredResult.error} class="error"&gt;
+    An error has occurred.
+  &lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              Import Apex method and <b>Apex wire adapter function</b> in test
+              file:
+            </p>
+            <pre>
+import myControllerMethod from '@salesforce/apex/MyController.myControllerMethod';
+import { registerApexTestWireAdapter } from '@salesforce/sfdx-lwc-jest';</pre
+            >
+            <p>Register wire adapter <b>before</b> declaring test suite:</p>
+            <pre>
+const myControllerMethodWireAdapter = registerApexTestWireAdapter(myControllerMethod);              
+describe('c-my-wire-component', () => { ... });</pre
+            >
+            <p>Test <b>successful</b> response of Apex method:</p>
+            <pre>
+it('displays the message when it has been retrieved successfully', async () => {
+  const element = createElement('c-my-wire-component', {
+    is: MyWireComponent
+  });
+  document.body.appendChild(element);
+  myControllerMethodWireAdapter.emit({ message: 'Hello John' });
+  await flushPromises();
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).not.toBeNull();
+  expect(message.textContent).toBe('Hello John');
+  const error = element.shadowRoot.querySelector('.error');
+  expect(error).toBeNull();
+});</pre
+            >
+            <p>Test <b>failure</b> response of Apex method:</p>
+            <pre>
+it('displays an error when message retrieval has failed', async () => {
+  const element = createElement('c-my-wire-component', {
+    is: MyWireComponent
+  });
+  document.body.appendChild(element);
+  myControllerMethodWireAdapter.error();
+  await flushPromises();
+  const error = element.shadowRoot.querySelector('.error');
+  expect(error).not.toBeNull();
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).toBeNull();
+});</pre
+            >
+            <p>Test <b>parameters</b> sent to Apex method:</p>
+            <pre>
+it('calls the server with given parameters', async () => {
+  const element = createElement('c-my-wire-component', {
+    is: MyWireComponent
+  });
+  document.body.appendChild(element);
+  await flushPromises();
+  expect(myControllerMethodWireAdapter.getLastConfig()).toEqual({ name: 'John' });
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test Imperative Apex Call
+              <a
+                href="https://github.com/trailheadapps/lwc-recipes/blob/master/force-app/main/default/lwc/apexImperativeMethod/__tests__/apexImperativeMethod.test.js"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myApexComponent</b> with the following class
+              and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+import myControllerMethod from '@salesforce/apex/MyController.myControllerMethod';
+export default class MyApexComponent extends LightningElement {
+  name = 'John';
+  message = null;
+  error = false;
+  connectedCallback() {
+    myControllerMethod(this.name)
+      .then((data) => { this.message = data.message; })
+      .catch((error) => { this.error = true; });
+  }
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div if:true={message} class="message"&gt;
+    {message}
+  &lt;/div&gt;
+  &lt;div if:true={error} class="error"&gt;
+    An error has occurred.
+  &lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              Import Apex method in test file:
+            </p>
+            <pre>
+import myControllerMethod from '@salesforce/apex/MyController.myControllerMethod';</pre
+            >
+            <p>Mock Apex method module <b>before</b> declaring test suite:</p>
+            <pre>
+jest.mock(
+  '@salesforce/apex/MyController.myControllerMethod',
+  () => ({ default: jest.fn() }), { virtual: true }
+);
+describe('c-my-apex-component', () => { ... });</pre
+            >
+            <p>Reset all Jest mocks after each test case:</p>
+            <pre>
+afterEach(() => {
+  jest.resetAllMocks();
+  // ...
+});</pre
+            >
+            <p>Test <b>successful</b> response of Apex method:</p>
+            <pre>
+it('displays the message when it has been retrieved successfully', async () => {
+  // Resolve with object typically returned by Apex method
+  myControllerMethod.mockResolvedValue({ message: 'Hello John' });
+  const element = createElement('c-my-apex-component', {
+    is: MyApexComponent
+  });
+  document.body.appendChild(element);
+  await flushPromises();
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).not.toBeNull();
+  expect(message.textContent).toBe('Hello John');
+  const error = element.shadowRoot.querySelector('.error');
+  expect(error).toBeNull();
+});</pre
+            >
+            <p>Test <b>failure</b> response of Apex method:</p>
+            <pre>
+it('displays an error when message retrieval has failed', async () => {
+  // Reject with Salesforce error object
+  myControllerMethod.mockRejectedValue({ ok: false, status: 400 });
+  const element = createElement('c-my-apex-component', {
+    is: MyApexComponent
+  });
+  document.body.appendChild(element);
+  await flushPromises();
+  const error = element.shadowRoot.querySelector('.error');
+  expect(error).not.toBeNull();
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message).toBeNull();
+});</pre
+            >
+            <p>Test <b>parameters</b> sent to Apex method:</p>
+            <pre>
+it('calls the server with given parameters', async () => {
+  myControllerMethod.mockResolvedValue({ message: 'Hello John' });
+  const element = createElement('c-my-apex-component', {
+    is: MyApexComponent
+  });
+  document.body.appendChild(element);
+  await flushPromises();
+  expect(myControllerMethod).toHaveBeenCalledWith('John');
+  // Or verify first argument of first call explicitly
+  expect(myControllerMethod.mock.calls[0][0]).toBe('John');
+});</pre
+            >
+          </section>
+        </article>
+      </section>
+      <section class="content__column">
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test I18N and Guest User
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_patterns"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myGuestAwareComponent</b> with the following
+              class and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+import LANG from '@salesforce/i18n/lang';
+import isGuest from '@salesforce/user/isGuest';
+export default class MyGuestAwareComponent extends LightningElement {
+  authenticated = !isGuest;
+  language = LANG;
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div class="message"&gt;
+    &lt;span if:false={authenticated}&gt;You're a guest&lt;/span&gt;
+    &lt;span if:true={authenticated}&gt;You're signed in&lt;/span&gt;
+    &lt;span&gt; with language {language}&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>Mock virtual modules <b>before</b> declaring test suite:</p>
+            <pre>
+jest.mock('@salesforce/i18n/lang', () => ({ default: 'de' }), { virtual: true });
+jest.mock('@salesforce/user/isGuest', () => ({ default: true }), { virtual: true });
+describe('c-my-guest-aware-component', () => { ... });</pre
+            >
+            <p>
+              Use <b>multiple test files</b> to simulate different user and I18N
+              states.
+            </p>
+            <p>Test component output:</p>
+            <pre>
+it('displays user state and language', () => {
+  const element = createElement('c-my-guest-aware-component', {
+    is: MyGuestAwareComponent
+  });
+  document.body.appendChild(element);
+  const message = element.shadowRoot.querySelector('.message');
+  expect(message.textContent).toBe("You're a guest with language de");
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test User Interaction
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_patterns"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myInteractiveComponent</b> with the following
+              class and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+export default class MyInteractiveComponent extends LightningElement {
+  selectedOption;
+  handleChange(event) {
+    this.selectedOption = event.target.value;
+  }
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div class="selected"&gt;{selectedOption}&lt;/div&gt;
+  &lt;div&gt;
+    &lt;select class="selection" onchange={handleChange}&gt;
+      &lt;option&gt;A&lt;/option&gt;
+      &lt;option&gt;B&lt;/option&gt;
+      &lt;option&gt;C&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>Test component interaction using synthetic event:</p>
+            <pre>
+it('displays the selected option', async () => {
+  const element = createElement('c-my-interactive-component', {
+    is: MyInteractiveComponent
+  });
+  document.body.appendChild(element);
+  const selection = element.shadowRoot.querySelector('.selection');
+  selection.value = 'B';
+  selection.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  await flushPromises();
+  const selected = element.shadowRoot.querySelector('.selected');
+  expect(selected.textContent).toBe('B');
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test Navigation
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_jest_patterns"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myNavigationComponent</b> with the following
+              class and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+export default class MyNavigationComponent extends NavigationMixin(LightningElement) {
+  navigateToHomepage() {
+    this[NavigationMixin.Navigate]({
+      type: 'standard__namedPage',
+      attributes: {
+        pageName: 'home'
+      }
+    });
+  }
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;a onclick={navigateToHomepage} class="home_link"&gt;Go to homepage&lt;/a&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              Create global mock file
+              <b>force-app/test/jest-mocks/lightning/navigation.js</b> for
+              navigation module in SFDX project:
+            </p>
+            <pre>
+export const CurrentPageReference = jest.fn();
+export const NavigateMock = jest.fn();
+export const GenerateUrlMock = jest.fn();
+const Navigate = Symbol('Navigate');
+const GenerateUrl = Symbol('GenerateUrl');
+export const NavigationMixin = (Base) => {
+  return class extends Base {
+    [Navigate] = NavigateMock;
+    [GenerateUrl] = GenerateUrlMock;
+  };
+};
+NavigationMixin.Navigate = Navigate;
+NavigationMixin.GenerateUrl = GenerateUrl;</pre
+            >
+            <p>Register navigation mock module in <b>jest.config.js</b>:</p>
+            <pre>
+module.exports = {
+  ...jestConfig,
+  moduleNameMapper: {
+    '^lightning/navigation$':
+      '&lt;rootDir&gt;/force-app/test/jest-mocks/lightning/navigation'
+  }
+};</pre
+            >
+            <p>Import navigation mock in test file:</p>
+            <pre>import { NavigateMock } from 'lightning/navigation';</pre>
+            <p>Reset all Jest mocks after each test case:</p>
+            <pre>
+afterEach(() => {
+  jest.resetAllMocks();
+  // ...
+});</pre
+            >
+            <p>Test call of navigation with expected <b>page reference</b>:</p>
+            <pre>
+it('navigates to homepage when link is clicked', () => {
+  const element = createElement('c-my-navigation-component', {
+    is: MyNavigationComponent
+  });
+  document.body.appendChild(element);
+  const link = element.shadowRoot.querySelector('.home_link');
+  link.click();
+  expect(NavigateMock).toHaveBeenCalledWith({
+    type: 'standard__namedPage',
+    attributes: {
+      pageName: 'home'
+    }
+  });
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test Current Page Reference
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_wire_utility"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+              <a
+                href="https://github.com/salesforce/wire-service-jest-util/blob/master/README.md"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a component <b>myPageRefComponent</b> with the following
+              class and template:
+            </p>
+            <pre>
+import { LightningElement, wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
+export default class MyPageRefComponent extends LightningElement {
+  @wire(CurrentPageReference)
+  wiredPageRef;
+}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;div if:true={wiredPageRef} class="page_type"&gt;{wiredPageRef.type}&lt;/div&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              Import current page reference and
+              <b>test wire adapter function</b> in test file:
+            </p>
+            <pre>
+import { CurrentPageReference } from 'lightning/navigation';
+import { registerTestWireAdapter } from '@salesforce/sfdx-lwc-jest';</pre
+            >
+            <p>Register wire adapter <b>before</b> declaring test suite:</p>
+            <pre>
+const currentPageRefWireAdapter = registerTestWireAdapter(CurrentPageReference);
+describe('c-my-page-ref-component', () => { ... });</pre
+            >
+            <p>Test component with <b>synthetic page reference</b>:</p>
+            <pre>
+it('displays current page type', async () => {
+  const element = createElement('c-my-page-ref-component', {
+    is: MyPageRefComponent
+  });
+  document.body.appendChild(element);
+  currentPageRefWireAdapter.emit({
+    type: 'standard__objectPage',
+    attributes: {
+      objectApiName: 'Contact',
+      actionName: 'new'
+    }
+  });
+  await flushPromises();
+  const pageType = element.shadowRoot.querySelector('.page_type');
+  expect(pageType).not.toBeNull();
+  expect(pageType.textContent).toBe('standard__objectPage');
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test with Mock Child Components
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Given a parent component <b>myParentComponent</b> with the
+              following class and template:
+            </p>
+            <pre>
+import { LightningElement } from 'lwc';
+export default class MyParentComponent extends LightningElement {}</pre
+            >
+            <pre>
+&lt;template&gt;
+  &lt;c-my-child-component param="Hello"&gt;&lt;/c-my-child-component&gt;
+&lt;/template&gt;</pre
+            >
+            <p>
+              And a child component <b>myChildComponent</b> with the following
+              class:
+            </p>
+            <pre>
+import { api, LightningElement } from 'lwc';
+export default class MyChildComponent extends LightningElement {
+  @api param;
+  // More logic
+}</pre
+            >
+            <p>
+              Create a mock file <b>__mocks__/myChildComponent.js</b> in the
+              child component directory, i.e.
+              <b>
+                force-app/main/default/lwc/myChildComponent/__mocks__/myChildComponent.js
+              </b>
+              , with the same public properties but no logic.
+            </p>
+            <pre>
+import { api, LightningElement } from 'lwc';
+export default class MyChildComponentMock extends LightningElement {
+  @api param;
+}</pre
+            >
+            <p>
+              Mock the child component in the parent test file
+              <b>before</b> declaring test suite:
+            </p>
+            <pre>
+jest.mock('c/myChildComponent');
+describe('c-my-parent-component', () => { ... });</pre
+            >
+            <p>Test parent component with <b>mocked child component</b>:</p>
+            <pre>
+it('displays the child with given parameters', () => {
+  const element = createElement('c-my-parent-component', {
+    is: MyParentComponent
+  });
+  document.body.appendChild(element);
+  const child = element.shadowRoot.querySelector('c-my-child-component');
+  // Child is the mock, not the real component
+  expect(child).not.toBeNull();
+  expect(child.param).toBe('Hello');
+});</pre
+            >
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Test with Externalized JSON Data
+              <a
+                href="https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.unit_testing_using_wire_utility"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              Create JSON file in subdirectory <b>data</b> inside the
+              <b>__tests__</b> directory of the component, e.g.
+              <b>myWireComponent/__tests__/data/successResponse.json</b>
+            </p>
+            <p>Import JSON file in test file:</p>
+            <pre>
+const successResponse = require('./data/successResponse.json');</pre
+            >
+            <p>
+              Inside test cases use imported data for wire adapter or Jest
+              mocks:
+            </p>
+            <pre>myControllerMethodWireAdapter.emit(successResponse);</pre>
+          </section>
+        </article>
+      </section>
+    </section>
+    <footer class="footer">
+      &copy;2020 Georg Wittberger, MIT Licensed
+    </footer>
+  </body>
+</html>
