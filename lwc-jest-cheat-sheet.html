@@ -949,6 +949,92 @@ const successResponse = require('./data/successResponse.json');</pre
             <pre>myControllerMethodWireAdapter.emit(successResponse);</pre>
           </section>
         </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Debugging in Visual Studio Code
+              <a
+                href="https://github.com/salesforce/sfdx-lwc-jest#debugging-in-visual-studio-code"
+                target="_blank"
+                class="topic__help_link"
+              >
+                🔗
+              </a>
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              One-time configuration of launch task in file
+              <b>.vscode/launch.json</b> in the SFDX project (Windows version):
+            </p>
+            <pre>
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
+    }
+  ]
+}</pre
+            >
+            <p>
+              In the launch panel of VS Code select the config
+              <b>Debug Jest Tests</b>.
+            </p>
+            <p>
+              Set a breakpoint in test case and run tests via launch config.
+            </p>
+          </section>
+        </article>
+        <article class="topic">
+          <header class="topic__header">
+            <h2 class="topic__heading">
+              Tasks in Visual Studio Code
+            </h2>
+          </header>
+          <section class="topic__content">
+            <p>
+              One-time configuration of tasks in file
+              <b>.vscode/tasks.json</b> in the SFDX project:
+            </p>
+            <pre>
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run All LWC Tests",
+      "type": "shell",
+      "command": "${workspaceFolder}/node_modules/.bin/lwc-jest",
+      "args": ["--coverage"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run LWC Tests in Current File",
+      "type": "shell",
+      "command": "${workspaceFolder}/node_modules/.bin/lwc-jest",
+      "args": ["--", "--runTestsByPath", "${relativeFile}"],
+      "problemMatcher": []
+    }
+  ]
+}</pre
+            >
+            <p>
+              Press <b>CTRL+P</b>, type <b>task</b> followed by space. Then
+              select the desired task. Alternatively, press <b>F1</b> and select
+              command <b>Run Task</b>.
+            </p>
+          </section>
+        </article>
       </section>
     </section>
     <footer class="footer">
