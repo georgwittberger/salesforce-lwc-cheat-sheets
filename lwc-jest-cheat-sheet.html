@@ -2,9 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <meta
+      name="description"
+      content="Cheat sheet covering various aspects of testing Salesforce Lightning Web Components using the Jest framework"
+    />
+    <meta name="keywords" content="salesforce, lwc, jest, test" />
+    <meta
+      property="og:title"
+      content="Salesforce Lightning Web Component Jest Test Cheat Sheet"
+    />
+    <meta
+      property="og:description"
+      content="Cheat sheet covering various aspects of testing Salesforce Lightning Web Components using the Jest framework"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://georgwittberger.github.io/salesforce-lwc-cheat-sheets/lwc-jest-cheat-sheet.html"
+    />
+    <meta
+      name="twitter:title"
+      content="Salesforce Lightning Web Component Jest Test Cheat Sheet"
+    />
+    <meta
+      name="twitter:description"
+      content="Cheat sheet covering various aspects of testing Salesforce Lightning Web Components using the Jest framework"
+    />
+    <link
+      rel="canonical"
+      href="https://georgwittberger.github.io/salesforce-lwc-cheat-sheets/lwc-jest-cheat-sheet.html"
+    />
     <title>Salesforce Lightning Web Component Jest Test Cheat Sheet</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
       html {
         font-size: 16px;
       }
@@ -14,7 +50,7 @@
         padding: 1rem;
       }
       .header__heading {
-        color: #666;
+        color: #222;
         font-size: 2rem;
         margin: 0;
         text-align: center;
@@ -40,26 +76,29 @@
       @media (min-width: 1024px) {
         .content {
           flex-direction: row;
-          justify-content: space-between;
+          margin-left: -0.5rem;
+          margin-right: -0.5rem;
         }
         .content__column {
           margin-top: 0;
-          width: 49%;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          width: 50%;
         }
       }
       .topic__header {
-        background-color: #f3f3f3;
+        background-color: #fdfdfd;
         border-bottom: 1px solid #ccc;
       }
       .topic__heading {
-        color: #666;
+        color: #222;
         font-size: 1.2rem;
         font-weight: bold;
         margin: 0;
         padding: 0.25rem 0.5rem;
       }
       .topic__help_link {
-        color: #666;
+        color: #222;
         font-size: 0.8rem;
         text-decoration: none;
       }
@@ -67,7 +106,7 @@
         padding: 0 0.5rem;
       }
       p {
-        color: #666;
+        color: #222;
         font-size: 0.8rem;
         margin: 0.5rem 0 0;
       }
@@ -75,8 +114,8 @@
         margin-bottom: 0.25rem;
       }
       pre {
-        color: #666;
-        background-color: #f3f3f3;
+        color: #222;
+        background-color: #fdfdfd;
         border: 1px solid #ccc;
         font-family: Consolas, "Courier New", Courier, monospace;
         font-size: 0.8rem;
@@ -84,7 +123,7 @@
         padding: 0.5rem;
       }
       .footer {
-        color: #666;
+        color: #222;
         font-size: 0.8rem;
         margin-top: 2rem;
         text-align: center;
@@ -113,9 +152,7 @@
             </h2>
           </header>
           <section class="topic__content">
-            <p>
-              One-time configuration for SFDX project using Salesforce CLI:
-            </p>
+            <p>One-time configuration for SFDX project using Salesforce CLI:</p>
             <pre>sfdx force:lightning:lwc:test:setup</pre>
             <p>
               One-time local installation for already configured SFDX project:
@@ -496,9 +533,7 @@ export default class MyApexComponent extends LightningElement {
   &lt;/div&gt;
 &lt;/template&gt;</pre
             >
-            <p>
-              Import Apex method in test file:
-            </p>
+            <p>Import Apex method in test file:</p>
             <pre>
 import myControllerMethod from '@salesforce/apex/MyController.myControllerMethod';</pre
             >
@@ -853,9 +888,7 @@ it('displays current page type', async () => {
         </article>
         <article class="topic">
           <header class="topic__header">
-            <h2 class="topic__heading">
-              Test with Mock Child Components
-            </h2>
+            <h2 class="topic__heading">Test with Mock Child Components</h2>
           </header>
           <section class="topic__content">
             <p>
@@ -998,9 +1031,7 @@ const successResponse = require('./data/successResponse.json');</pre
         </article>
         <article class="topic">
           <header class="topic__header">
-            <h2 class="topic__heading">
-              Tasks in Visual Studio Code
-            </h2>
+            <h2 class="topic__heading">Tasks in Visual Studio Code</h2>
           </header>
           <section class="topic__content">
             <p>
@@ -1037,8 +1068,6 @@ const successResponse = require('./data/successResponse.json');</pre
         </article>
       </section>
     </section>
-    <footer class="footer">
-      &copy;2020 Georg Wittberger, MIT Licensed
-    </footer>
+    <footer class="footer">&copy;2020 Georg Wittberger, MIT Licensed</footer>
   </body>
 </html>
